@@ -33,19 +33,22 @@
     return request(input, options);
   };
 
-  function normalizeServiceLink(link) {
-    const slug = link.getAttribute('href');
-    if (servicePaths.has(slug)) link.href = new URL('service/' + slug, root).href;
+  function normalizeNavigationLink(link) {
+    const href = link.getAttribute('href');
+    if (href === '/' && root.pathname !== '/') link.href = root.pathname;
+    if (servicePaths.has(href)) link.href = new URL('service/' + href, root).href;
   }
 
   document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('a[href]').forEach(normalizeServiceLink);
+    document.querySelectorAll('a[href]').forEach(normalizeNavigationLink);
     new MutationObserver((changes) => {
       for (const change of changes) {
-        if (change.type === 'attributes') normalizeServiceLink(change.target);
+        if (change.type === 'attributes' && change.target instanceof HTMLAnchorElement) {
+          normalizeNavigationLink(change.target);
+        }
         for (const node of change.addedNodes) {
-          if (node instanceof HTMLAnchorElement) normalizeServiceLink(node);
-          if (node instanceof Element) node.querySelectorAll('a[href]').forEach(normalizeServiceLink);
+          if (node instanceof HTMLAnchorElement) normalizeNavigationLink(node);
+          if (node instanceof Element) node.querySelectorAll('a[href]').forEach(normalizeNavigationLink);
         }
       }
     }).observe(document.body, { subtree: true, childList: true, attributes: true, attributeFilter: ['href'] });
