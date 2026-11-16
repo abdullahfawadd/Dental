@@ -1,0 +1,32 @@
+:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+main {
+  overflow-x: clip;
+}
+
+.dental-form-status {
+  font: inherit;
+  margin-block: 0.75em;
+}
+
+.dental-form-status a {
+  text-decoration: underline;
+}
+
+input[aria-invalid="true"] {
+  outline: 2px solid #a32424;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
